@@ -1857,10 +1857,50 @@ main {
 .metric-card.ok b { color: var(--ok); }
 .metric-card.warn b { color: var(--warn); }
 .metric-card.hot b, .metric-card.sweep b { color: var(--accent-ink); }
-/* 任务列表页顶部概览统计条（3 卡） */
-.tasks-stats { grid-template-columns: repeat(3, minmax(150px, 1fr)); }
+/* 任务池页顶部概览统计条（4 卡） */
+.tasks-stats { grid-template-columns: repeat(4, minmax(120px, 1fr)); }
 .tasks-stats .metric-card.warn { cursor: pointer; }
 .tasks-stats .metric-card.warn.active { border-color: color-mix(in srgb, var(--warn) 45%, var(--border)); }
+
+/* ---- 任务清单行（表格形态） ---- */
+.task-row {
+  display: grid;
+  grid-template-columns: 14px minmax(0, 1fr) auto auto auto;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  transition: border-color .15s, background-color .15s;
+}
+.task-row:hover { border-color: var(--border); background: var(--surface-2); }
+.task-row.live { border-color: color-mix(in srgb, var(--accent) 34%, var(--border)); }
+.tr-state {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--faint);
+  display: inline-block; flex: none;
+}
+.tr-state.running { background: var(--ok); }
+.tr-state.idle { background: var(--info); }
+.tr-state.paused { background: var(--warn); }
+.tr-state.stopped, .tr-state.created { background: var(--faint); }
+.tr-main { min-width: 0; }
+.tr-title { display: flex; align-items: center; gap: 8px; }
+.tr-title b { font-size: 14.5px; font-weight: 600; }
+.tr-query {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 12px; margin-top: 3px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.tr-tags { display: flex; align-items: center; gap: 10px; white-space: nowrap; }
+.tr-time { font-size: 12px; white-space: nowrap; }
+.tr-actions { justify-content: flex-end; }
+.tr-chevron { color: var(--faint); font-size: 16px; }
+@media (max-width: 860px) {
+  .task-row { grid-template-columns: 14px minmax(0, 1fr) auto; }
+  .tr-tags, .tr-time { display: none; }
+}
 @media (max-width: 1180px) { .metric-grid { grid-template-columns: repeat(4, minmax(118px, 1fr)); } }
 @media (max-width: 760px) {
   .mission-hero { grid-template-columns: 1fr; }

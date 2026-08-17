@@ -40,6 +40,9 @@ function taskScopeText(t) {
 
 const hasRunning = computed(() => tasks.value.some((t) => t.status === "running"));
 const runningCount = computed(() => tasks.value.filter((t) => t.status === "running").length);
+const settledCount = computed(
+  () => tasks.value.filter((t) => ["idle", "stopped", "paused"].includes(t.status)).length
+);
 const pendingReviewTotal = computed(() =>
   tasks.value.reduce((s, t) => s + (t.pending_user_review || 0), 0)
 );
@@ -163,16 +166,16 @@ watch(hasRunning, () => syncPoller());
     <div v-if="refreshing && !initialLoading" class="view-progress" aria-hidden="true"><i></i></div>
     <header class="page-head">
       <div>
-        <h2>任务列表</h2>
-        <p class="page-sub">点击进入指挥台，查看实时看板与复审队列</p>
+        <h2>任务池</h2>
+        <p class="page-sub">统筹所有挖掘任务 · 点击任意一行进入指挥台看板</p>
       </div>
       <div class="head-actions">
         <router-link v-if="authRoleRef !== 'observer'" class="head-action vuln-entry" to="/vulns">
           全局漏洞库
         </router-link>
-        <router-link class="head-action" to="/hard-targets">全局硬骨头库</router-link>
+        <router-link class="head-action" to="/hard-targets">硬骨头库</router-link>
         <router-link v-if="authRoleRef !== 'observer'" class="head-action intel-entry" to="/intel">
-          <span class="ie-dot" aria-hidden="true"></span>全局情报库
+          <span class="ie-dot" aria-hidden="true"></span>情报库
         </router-link>
         <router-link v-if="authRoleRef !== 'observer'" class="head-action" to="/runtime-logs">
           运行异常
@@ -181,9 +184,9 @@ watch(hasRunning, () => syncPoller());
     </header>
     <div v-if="!initialLoading" class="metric-grid tasks-stats">
       <div class="metric-card hot">
-        <span class="metric-k">RUNNING</span>
+        <span class="metric-k">ACTIVE</span>
         <b>{{ runningCount }}</b>
-        <em>运行中任务</em>
+        <em>运行中</em>
       </div>
       <div class="metric-card">
         <span class="metric-k">TOTAL</span>
@@ -194,60 +197,54 @@ watch(hasRunning, () => syncPoller());
         :title="pendingReviewTotal > 0 ? '点击前往第一个有待复审的任务' : '当前没有待复审漏洞'">
         <span class="metric-k">REVIEW</span>
         <b>{{ pendingReviewTotal }}</b>
-        <em>待复审漏洞</em>
+        <em>待复审</em>
+      </div>
+      <div class="metric-card ok">
+        <span class="metric-k">SETTLED</span>
+        <b>{{ settledCount }}</b>
+        <em>已收尾</em>
       </div>
     </div>
     <div v-if="initialLoading" class="task-list">
-      <div v-for="n in 4" :key="n" class="task-card skeleton-task" aria-hidden="true">
-        <div class="task-card-main">
-          <div class="tc-title"><span class="sk-bar sk-title"></span></div>
-          <div class="task-card-meta">
-            <span class="sk-bar sk-badge"></span>
-            <span class="sk-bar sk-meta"></span>
-          </div>
-          <div class="task-query sk-query-wrap">
-            <span class="sk-bar sk-query"></span>
-            <span class="sk-bar sk-query short"></span>
-          </div>
+      <div v-for="n in 5" :key="n" class="task-row" aria-hidden="true">
+        <span class="sk-bar sk-badge"></span>
+        <div class="tr-main">
+          <div class="sk-bar sk-title"></div>
+          <div class="sk-bar sk-query short"></div>
         </div>
-        <div class="task-card-side">
-          <span class="sk-bar sk-time"></span>
-          <div class="task-actions">
-            <span class="sk-bar sk-action"></span>
-            <span class="sk-bar sk-action"></span>
-          </div>
-        </div>
+        <span class="sk-bar sk-badge"></span>
+        <span class="sk-bar sk-time"></span>
       </div>
     </div>
     <div v-else-if="!tasks.length" class="empty">
-      还没有任务
-      <span class="hint">点顶栏「新建」创建第一个挖掘任务</span>
+      任务池还是空的
+      <span class="hint">点侧边栏「新建」创建第一个挖掘任务</span>
     </div>
     <div v-else class="task-list">
-      <div v-for="t in tasks" :key="t.id" class="task-card" :class="{ live: t.status === 'running' }"
+      <div v-for="t in tasks" :key="t.id" class="task-row" :class="{ live: t.status === 'running' }"
         @click="router.push(`/task/${t.id}`)">
-        <div class="task-card-main">
-          <div class="tc-title">
-            <span v-if="t.status === 'running'" class="pulse"></span>
+        <span class="tr-state" :class="t.status" aria-hidden="true">
+          <i v-if="t.status === 'running'" class="pulse"></i>
+        </span>
+        <div class="tr-main">
+          <div class="tr-title">
             <b>{{ t.name }}</b>
+            <span v-if="t.pending_user_review > 0" class="review-dot"
+                  :title="`${t.pending_user_review} 个漏洞待复审`">{{ t.pending_user_review }}</span>
           </div>
-          <span v-if="t.pending_user_review > 0" class="review-dot"
-                :title="`${t.pending_user_review} 个漏洞待复审`">{{ t.pending_user_review }}</span>
-          <div class="task-card-meta">
-            <span class="badge" :class="t.status">{{ STATUS_LABEL[t.status] || t.status }}</span>
-            <span class="meta">{{ taskModeLabel(t) }} · {{ targetSourceLabel(t.target_source) }} · 并发 {{ t.concurrency }}</span>
-          </div>
-          <div class="meta task-query">{{ taskScopeText(t) }}</div>
+          <div class="meta tr-query">{{ taskScopeText(t) }}</div>
         </div>
-        <div class="task-card-side">
-          <time class="meta task-time">{{ t.created_at.slice(0, 19).replace("T", " ") }}</time>
-          <div v-if="writable" class="task-actions">
-            <button v-if="canQuickStart(t)" class="mini-action go" type="button" @click.stop="quickStart(t)">启动</button>
-            <button class="mini-action" type="button" @click.stop="openEdit(t)">编辑参数</button>
-            <button class="mini-action danger" type="button" @click.stop="askDelete(t)">删除</button>
-          </div>
-          <span class="task-chevron" aria-hidden="true">›</span>
+        <div class="tr-tags">
+          <span class="badge" :class="t.status">{{ STATUS_LABEL[t.status] || t.status }}</span>
+          <span class="meta">{{ taskModeLabel(t) }} · {{ targetSourceLabel(t.target_source) }}</span>
         </div>
+        <time class="meta tr-time">{{ t.created_at.slice(0, 16).replace("T", " ") }}</time>
+        <div v-if="writable" class="task-actions tr-actions">
+          <button v-if="canQuickStart(t)" class="mini-action go" type="button" @click.stop="quickStart(t)">启动</button>
+          <button class="mini-action" type="button" @click.stop="openEdit(t)">编辑</button>
+          <button class="mini-action danger" type="button" @click.stop="askDelete(t)">删除</button>
+        </div>
+        <span v-else class="tr-chevron" aria-hidden="true">›</span>
       </div>
     </div>
     <TaskEditModal :open="editOpen" :task="editingTask" @close="closeEdit" @saved="onSaved" />
