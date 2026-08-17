@@ -1,38 +1,37 @@
 @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap");
 
 /* ============================================================
-   Hunter — 作战终端 / product register
-   克制配色：tinted neutrals + 单一 accent。颜色只用于操作与状态。
-   无渐变 / 无渐变文字 / 无发光 / 无左竖条 / 无毛玻璃默认 / 无 bounce。
-   HEX 色彩变量：暗色底 #0a0e17，accent #22d3ee，ok #34d399。
+   Hunter — 私有狩猎终端
+   设计语言：炭黑底 + 琥珀高亮（暖色作战风），克制无渐变堆叠。
+   颜色只用于操作与状态；主色只给当前选中 / 主操作 / 焦点。
    明暗主题经 [data-theme] 切换。
    ============================================================ */
 
 :root,
 :root[data-theme="dark"] {
   color-scheme: dark;
-  /* 中性层（带极轻冷色调，承载背景/面板/边框） */
-  --bg:        #0a0e17;   /* 内容底 */
-  --surface:   #0f1524;   /* 面板 */
-  --surface-2: #151d30;   /* 抬升面板/输入 */
-  --surface-3: #1c2540;   /* hover / active */
-  --nav:       #0c1220;   /* 第二中性层：侧栏/工具条 */
-  --border:    #26304a;
-  --border-soft: #1a2338;
+  /* 中性层（炭黑暖调，承载背景/面板/边框） */
+  --bg:        #0c0c0f;   /* 内容底 */
+  --surface:   #151519;   /* 面板 */
+  --surface-2: #1c1c22;   /* 抬升面板/输入 */
+  --surface-3: #24242c;   /* hover / active */
+  --nav:       #101014;   /* 侧栏/工具条 */
+  --border:    #2c2c36;
+  --border-soft: #1f1f26;
 
-  /* 文字阶（确保对比度：正文 ≥4.5:1） */
-  --ink:    #e6edf7;   /* 主文字 */
-  --ink-2:  #c2ccdd;   /* 次级标题 */
-  --muted:  #93a1ba;   /* 弱化文字（仍达 4.5:1） */
-  --faint:  #6e7d99;   /* 极弱：仅元信息/时间戳 */
+  /* 文字阶（暖白，正文 ≥4.5:1） */
+  --ink:    #f2efe9;   /* 主文字 */
+  --ink-2:  #d6d1c6;   /* 次级标题 */
+  --muted:  #a49f93;   /* 弱化文字 */
+  --faint:  #7c776d;   /* 极弱：元信息/时间戳 */
 
-  /* 单一品牌 accent：只用于主操作 / 当前选中 / 焦点 */
-  --accent:     #22d3ee;
-  --accent-ink: #a5f3fc;
-  --accent-bg:  rgba(34, 211, 238, 0.14);
-  --on-accent:  #062a33;
+  /* 品牌 accent：琥珀（只用于主操作 / 当前选中 / 焦点） */
+  --accent:     #f5a524;
+  --accent-ink: #ffd9a0;
+  --accent-bg:  rgba(245, 165, 36, 0.14);
+  --on-accent:  #3a2400;
 
-  /* 语义状态色（冷静、可区分；状态另有文字/图标冗余） */
+  /* 语义状态色（保持冷静可区分；状态另有文字/图标冗余） */
   --ok:    #34d399;   /* 成功/发现 */
   --warn:  #fbbf24;   /* 警告/超时 */
   --danger:#f87171;   /* 错误/严重 */
@@ -43,9 +42,9 @@
   --danger-bg:rgba(248, 113, 113, 0.14);
   --info-bg:  rgba(56, 189, 248, 0.14);
 
-  --shadow:    0 1px 2px rgba(0, 0, 0, 0.4), 0 4px 16px rgba(0, 0, 0, 0.28);
-  --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.5);
-  --line: rgba(56, 189, 248, 0.08);
+  --shadow:    0 1px 2px rgba(0, 0, 0, 0.45), 0 4px 16px rgba(0, 0, 0, 0.32);
+  --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.55);
+  --line: rgba(245, 165, 36, 0.08);
   --radius: 10px;
   --radius-sm: 7px;
 
@@ -58,22 +57,22 @@
 
 :root[data-theme="light"] {
   color-scheme: light;
-  --bg:        #f3f5f9;
+  --bg:        #f7f5f0;
   --surface:   #ffffff;
-  --surface-2: #eef1f7;
-  --surface-3: #e4e9f2;
-  --nav:       #e9edf5;
-  --border:    #d8deea;
-  --border-soft: #e2e7f0;
+  --surface-2: #f0ede6;
+  --surface-3: #e6e2d8;
+  --nav:       #efece4;
+  --border:    #ddd8cc;
+  --border-soft: #e6e2d8;
 
-  --ink:    #1c2433;
-  --ink-2:  #33405a;
-  --muted:  #5a6780;
-  --faint:  #7a87a0;
+  --ink:    #2a2722;
+  --ink-2:  #4d483e;
+  --muted:  #6d675c;
+  --faint:  #8b857a;
 
-  --accent:     #0891b2;
-  --accent-ink: #0e7490;
-  --accent-bg:  rgba(8, 145, 178, 0.10);
+  --accent:     #d97706;
+  --accent-ink: #b45309;
+  --accent-bg:  rgba(217, 119, 6, 0.10);
   --on-accent:  #ffffff;
 
   --ok:    #059669;
@@ -88,7 +87,7 @@
 
   --shadow:    0 1px 2px rgba(0, 0, 0, 0.06), 0 4px 16px rgba(0, 0, 0, 0.08);
   --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.14);
-  --line: rgba(37, 99, 235, 0.08);
+  --line: rgba(217, 119, 6, 0.08);
 }
 
 * { box-sizing: border-box; }
@@ -103,9 +102,9 @@ body {
   color: var(--ink);
   background-color: var(--bg);
   background-image:
-    radial-gradient(circle at 18% -12%, var(--accent-bg), transparent 32rem),
-    radial-gradient(circle at 92% 8%, var(--info-bg), transparent 28rem),
-    linear-gradient(180deg, var(--nav), var(--bg) 24rem);
+    radial-gradient(circle at 16% -10%, var(--accent-bg), transparent 30rem),
+    radial-gradient(circle at 95% 4%, var(--ok-bg), transparent 26rem),
+    linear-gradient(180deg, var(--nav), var(--bg) 26rem);
   background-attachment: fixed, fixed, scroll;
   background-repeat: no-repeat;
   font-family: "IBM Plex Sans", -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
@@ -174,29 +173,30 @@ a:hover { text-decoration: underline; }
 
 /* ---------- 顶栏：第二中性层，实底不模糊 ---------- */
 .topbar {
-  position: sticky; top: 0; z-index: var(--z-sticky);
-  display: flex; align-items: center; justify-content: space-between; gap: 16px;
-  padding: 12px 34px;
-  padding-top: max(12px, env(safe-area-inset-top, 0px));
-  background: color-mix(in srgb, var(--nav) 92%, transparent);
-  border-bottom: 1px solid var(--border-soft);
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.02);
+  position: fixed; left: 0; top: 0; bottom: 0; z-index: var(--z-sticky);
+  display: flex; flex-direction: column; align-items: stretch; gap: 18px;
+  width: 232px; padding: 20px 14px;
+  padding-top: max(20px, env(safe-area-inset-top, 0px));
+  background: color-mix(in srgb, var(--nav) 96%, transparent);
+  border-right: 1px solid var(--border-soft);
+  box-shadow: 1px 0 0 rgba(0, 0, 0, 0.25);
+  overflow-y: auto;
 }
 .topbar-row {
-  display: flex; align-items: center; justify-content: space-between; gap: 12px;
-  flex: 1; min-width: 0;
+  display: flex; flex-direction: column; align-items: stretch; gap: 12px;
 }
 .topbar-tools {
-  display: flex; align-items: center; gap: 8px; flex: none;
+  display: flex; align-items: center; gap: 8px; flex: none; flex-wrap: wrap;
 }
 .topbar-nav {
-  display: flex; gap: 4px; flex: none;
-  background: var(--surface); border: 1px solid var(--border-soft);
-  border-radius: 12px; padding: 4px;
+  display: flex; flex-direction: column; align-items: stretch; gap: 4px;
+  margin-top: 6px;
+  background: transparent; border: none; border-radius: 0; padding: 0;
 }
 .topbar-nav .navbtn {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 7px 14px; border-radius: 9px;
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; border-radius: 10px;
+  justify-content: flex-start; width: 100%;
 }
 .nav-icon {
   font-size: 12px; line-height: 1; opacity: .75;
@@ -346,7 +346,8 @@ nav { display: flex; gap: 2px; }
 .desktop-only-nav { display: flex; }
 
 main {
-  max-width: 1360px; margin: 0 auto;
+  margin-left: 232px;
+  max-width: 1360px; margin-right: auto;
   padding: 30px 34px calc(42px + env(safe-area-inset-bottom, 0px));
 }
 .view { animation: fade .2s ease; }
@@ -378,7 +379,7 @@ main {
 
 /* ---------- 丝滑加载：进度条 + 骨架屏 ---------- */
 .view-progress {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 60;
+  position: fixed; top: 0; left: 232px; right: 0; z-index: 60;
   height: 2px; pointer-events: none;
   background: color-mix(in srgb, var(--accent) 18%, transparent);
 }
@@ -508,10 +509,19 @@ main {
 
 @media (max-width: 720px) {
   .topbar {
+    position: sticky; left: auto; right: auto; bottom: auto;
     flex-direction: row; align-items: center; gap: 0;
+    width: auto; height: auto;
     padding: 10px 14px;
     padding-top: max(10px, env(safe-area-inset-top, 0px));
+    border-right: none; border-bottom: 1px solid var(--border-soft);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.03);
+    overflow: visible;
   }
+  .topbar-row {
+    flex-direction: row; align-items: center; justify-content: space-between;
+  }
+  .sidebar-footer { display: none; }
   .brand .sub, .brand-copy small { display: none; }
   .desktop-only-nav { display: none !important; }
   .mobile-only-nav {
@@ -570,8 +580,10 @@ main {
     letter-spacing: .01em;
   }
   main {
+    margin-left: 0;
     padding: 14px 12px calc(72px + env(safe-area-inset-bottom, 0px));
   }
+  .view-progress { left: 0; }
 }
 
 /* ---------- 任务列表 ---------- */
@@ -3492,24 +3504,21 @@ main {
   .ir-del { top: 13px; transform: none; opacity: 1; }
 }
 
-/* ---- 署名 ---- */
-.app-credit {
+/* ---- 侧边栏署名 ---- */
+.sidebar-footer {
+  margin-top: auto;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 14px 12px 22px;
-  font-size: 12px;
+  flex-direction: column;
+  gap: 5px;
+  padding: 16px 8px 6px;
+  border-top: 1px solid var(--border-soft);
+  font-size: 11px;
+  line-height: 1.55;
   letter-spacing: 0.02em;
-  color: var(--muted, #8a94a6);
-  opacity: 0.75;
+  color: var(--faint);
 }
-.app-credit b { color: var(--accent, #3b9eff); font-weight: 600; }
+.sidebar-footer b { color: var(--accent); font-weight: 600; }
 .app-credit-sep { opacity: 0.45; }
-@media (max-width: 720px) {
-  /* 给底部导航留出空间，避免署名被遮挡 */
-  .app-credit { padding-bottom: 78px; }
-}
 
 
 /* Settings: multi-engine API keys */

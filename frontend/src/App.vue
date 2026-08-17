@@ -85,7 +85,7 @@ onUnmounted(() => {
         <span class="logo"><i></i></span>
         <span class="brand-copy">
           <b>Hunter</b>
-          <small class="brand-tag">SRC · 24×7</small>
+          <small class="brand-tag">PRIVATE · 24×7</small>
         </span>
       </div>
       <div class="topbar-tools">
@@ -133,16 +133,14 @@ onUnmounted(() => {
         <span>设置</span>
       </router-link>
     </nav>
+    <footer class="sidebar-footer" aria-label="署名">
+      <span><b>Hunter</b> — 私有 AI 狩猎终端</span>
+      <span>个人自用 · 请仅测试已授权目标</span>
+    </footer>
   </header>
   <main>
     <router-view />
   </main>
-
-  <footer class="app-credit" aria-label="署名">
-    <span>Hunter — AI 自主漏洞挖掘平台</span>
-    <span class="app-credit-sep">·</span>
-    <span>个人自用 · 请仅测试已授权目标</span>
-  </footer>
 
   <nav class="bottom-nav mobile-only-nav" aria-label="主导航">
     <router-link to="/" class="bottom-nav-item" :class="{ active: route.path === '/' }">

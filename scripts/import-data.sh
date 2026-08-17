@@ -72,7 +72,8 @@ fi
 
 # ---------- 2. 探测目标卷 ----------
 if [[ -z "$TO_VOL" ]]; then
-  TO_VOL=$(docker volume ls -q | grep -i "^hunter_data$\|hunter.*data" | head -n1 || true)
+  # 只精确匹配 Hunter 自己的数据卷（hunter_data），避免误匹配 autohunter_* 等旧部署卷名
+  TO_VOL=$(docker volume ls -q | grep -ix "hunter_data" | head -n1 || true)
   [[ -z "$TO_VOL" ]] && TO_VOL="hunter_data"
   ok "目标卷：${TO_VOL}（可用 --to 覆盖）"
 fi

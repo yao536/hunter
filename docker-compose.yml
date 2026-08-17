@@ -6,7 +6,11 @@
 # ============================================================================
 services:
   hunter:
-    build: .
+    build:
+      context: .
+      args:
+        # GitHub 加速镜像前缀（国内网络构建必需），.env 里设 GH_MIRROR=https://ghfast.top/
+        GH_MIRROR: ${GH_MIRROR:-}
     image: hunter:latest
     container_name: hunter
     ports:
