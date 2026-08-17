@@ -2,7 +2,7 @@
 
 /* ============================================================
    Hunter — 私有狩猎终端
-   设计语言：炭黑底 + 琥珀高亮（暖色作战风），克制无渐变堆叠。
+   设计语言：炭黑底 + 靛蓝高亮（冷色作战风），克制无渐变堆叠。
    颜色只用于操作与状态；主色只给当前选中 / 主操作 / 焦点。
    明暗主题经 [data-theme] 切换。
    ============================================================ */
@@ -25,11 +25,11 @@
   --muted:  #a49f93;   /* 弱化文字 */
   --faint:  #7c776d;   /* 极弱：元信息/时间戳 */
 
-  /* 品牌 accent：琥珀（只用于主操作 / 当前选中 / 焦点） */
-  --accent:     #f5a524;
-  --accent-ink: #ffd9a0;
-  --accent-bg:  rgba(245, 165, 36, 0.14);
-  --on-accent:  #3a2400;
+  /* 品牌 accent：靛蓝（只用于主操作 / 当前选中 / 焦点） */
+  --accent:     #6366f1;
+  --accent-ink: #c7d2fe;
+  --accent-bg:  rgba(99, 102, 241, 0.14);
+  --on-accent:  #eef2ff;
 
   /* 语义状态色（保持冷静可区分；状态另有文字/图标冗余） */
   --ok:    #34d399;   /* 成功/发现 */
@@ -44,7 +44,7 @@
 
   --shadow:    0 1px 2px rgba(0, 0, 0, 0.45), 0 4px 16px rgba(0, 0, 0, 0.32);
   --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.55);
-  --line: rgba(245, 165, 36, 0.08);
+  --line: rgba(99, 102, 241, 0.08);
   --radius: 10px;
   --radius-sm: 7px;
 
@@ -70,9 +70,9 @@
   --muted:  #6d675c;
   --faint:  #8b857a;
 
-  --accent:     #d97706;
-  --accent-ink: #b45309;
-  --accent-bg:  rgba(217, 119, 6, 0.10);
+  --accent:     #4f46e5;
+  --accent-ink: #4338ca;
+  --accent-bg:  rgba(79, 70, 229, 0.10);
   --on-accent:  #ffffff;
 
   --ok:    #059669;
@@ -87,7 +87,7 @@
 
   --shadow:    0 1px 2px rgba(0, 0, 0, 0.06), 0 4px 16px rgba(0, 0, 0, 0.08);
   --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.14);
-  --line: rgba(217, 119, 6, 0.08);
+  --line: rgba(79, 70, 229, 0.08);
 }
 
 * { box-sizing: border-box; }
@@ -103,7 +103,7 @@ body {
   background-color: var(--bg);
   background-image:
     radial-gradient(circle at 16% -10%, var(--accent-bg), transparent 30rem),
-    radial-gradient(circle at 95% 4%, var(--ok-bg), transparent 26rem),
+    radial-gradient(circle at 95% 4%, var(--info-bg), transparent 26rem),
     linear-gradient(180deg, var(--nav), var(--bg) 26rem);
   background-attachment: fixed, fixed, scroll;
   background-repeat: no-repeat;
