@@ -27,20 +27,25 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # 也比跟踪 master HEAD 稳。pip 会把 sqlmap 装到 PATH，无需再包一层 wrapper。
 RUN pip install --no-cache-dir sqlmap
 
-# ProjectDiscovery 工具：nuclei + httpx（从官方 release 拉二进制，避免装 Go）
-# TARGETARCH 由 buildkit 自动注入(arm64/amd64)
+# ProjectDiscovery 工具：nuclei + httpx（从 release 拉二进制，避免装 Go）
+# GH_MIRROR 可指定 GitHub 加速前缀（国内网络建议，如 https://ghfast.top/），
+# 由 docker-compose 的 build arg 注入；下载失败不阻断构建（仅工具降级，不影响核心）。
 ARG TARGETARCH
+ARG GH_MIRROR=""
 RUN set -eux; \
     NUCLEI_VER=3.3.7; HTTPX_VER=1.6.9; \
     cd /tmp; \
-    wget -q "https://github.com/projectdiscovery/nuclei/releases/download/v${NUCLEI_VER}/nuclei_${NUCLEI_VER}_linux_${TARGETARCH}.zip" -O nuclei.zip; \
-    wget -q "https://github.com/projectdiscovery/httpx/releases/download/v${HTTPX_VER}/httpx_${HTTPX_VER}_linux_${TARGETARCH}.zip" -O httpx.zip; \
-    apt-get update && apt-get install -y --no-install-recommends unzip; \
-    unzip -o nuclei.zip nuclei -d /usr/local/bin/; \
-    unzip -o httpx.zip httpx -d /usr/local/bin/; \
-    chmod +x /usr/local/bin/nuclei /usr/local/bin/httpx; \
+    wget -q -T 60 "${GH_MIRROR}https://github.com/projectdiscovery/nuclei/releases/download/v${NUCLEI_VER}/nuclei_${NUCLEI_VER}_linux_${TARGETARCH}.zip" -O nuclei.zip || true; \
+    wget -q -T 60 "${GH_MIRROR}https://github.com/projectdiscovery/httpx/releases/download/v${HTTPX_VER}/httpx_${HTTPX_VER}_linux_${TARGETARCH}.zip" -O httpx.zip || true; \
+    if [ -f nuclei.zip ] || [ -f httpx.zip ]; then \
+      apt-get update && apt-get install -y --no-install-recommends unzip; \
+    fi; \
+    [ -f nuclei.zip ] && unzip -o nuclei.zip nuclei -d /usr/local/bin/; \
+    [ -f httpx.zip ] && unzip -o httpx.zip httpx -d /usr/local/bin/; \
+    chmod +x /usr/local/bin/nuclei /usr/local/bin/httpx 2>/dev/null || true; \
     rm -f /tmp/*.zip; \
-    apt-get purge -y unzip; rm -rf /var/lib/apt/lists/*
+    apt-get purge -y unzip 2>/dev/null || true; rm -rf /var/lib/apt/lists/*; \
+    echo "[tools] check:"; ls -l /usr/local/bin/nuclei /usr/local/bin/httpx 2>/dev/null || echo "[tools] nuclei/httpx 未安装（网络受限，功能降级）"
 
 WORKDIR /app
 COPY requirements.txt .

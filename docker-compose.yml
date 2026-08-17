@@ -28,4 +28,6 @@ services:
 
 volumes:
   hunter_data:
+    name: hunter_data
   hunter_work:
+    name: hunter_work
