@@ -1,0 +1,27 @@
+# ============================================================================
+#  Hunter —— AI 自主漏洞挖掘平台
+#  一键启动：  cp .env.example .env  &&  编辑 .env 填 LLM_API_KEY  &&  docker compose up -d --build
+#  或直接运行引导脚本：  bash scripts/setup.sh
+#  数据导入：把旧部署卷中的数据库文件拷入 hunter_data 卷即可自动采用（scripts/import-data.sh）
+# ============================================================================
+services:
+  hunter:
+    build: .
+    image: hunter:latest
+    container_name: hunter
+    ports:
+      # 宿主机端口:容器端口。改宿主机端口：在 .env 里设 HUNTER_HOST_PORT
+      - "${HUNTER_HOST_PORT:-18800}:18800"
+    env_file:
+      - .env
+    environment:
+      - DB_PATH=/app/data/hunter.db
+      - WORKER_WORK_ROOT=/work
+    volumes:
+      - hunter_data:/app/data        # SQLite + 证据持久化（重启恢复依赖，勿删）
+      - hunter_work:/work            # worker 临时工作区
+    restart: unless-stopped      # 崩溃自动重启，从 DB 恢复任务状态
+
+volumes:
+  hunter_data:
+  hunter_work:
