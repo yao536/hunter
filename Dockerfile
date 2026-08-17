@@ -14,6 +14,9 @@ ENV DEBIAN_FRONTEND=noninteractive \
     PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1
 
+# pip 镜像源（国内网络建议默认清华源；可被 compose 的 build arg 覆盖）
+ARG PIP_MIRROR="https://pypi.tuna.tsinghua.edu.cn/simple"
+
 # 系统工具 + 挖洞常用工具
 RUN apt-get update && apt-get install -y --no-install-recommends \
         curl wget git ca-certificates \
@@ -25,7 +28,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # sqlmap：官方 PyPI 月度版。构建不依赖 git clone GitHub（国内常超时/失败），
 # 也比跟踪 master HEAD 稳。pip 会把 sqlmap 装到 PATH，无需再包一层 wrapper。
-RUN pip install --no-cache-dir sqlmap
+RUN pip install --no-cache-dir -i "${PIP_MIRROR}" sqlmap
 
 # ProjectDiscovery 工具：nuclei + httpx（从 release 拉二进制，避免装 Go）
 # GH_MIRROR 可指定 GitHub 加速前缀（国内网络建议，如 https://ghfast.top/），
@@ -49,7 +52,7 @@ RUN set -eux; \
 
 WORKDIR /app
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -i "${PIP_MIRROR}" -r requirements.txt
 
 # 更新 nuclei 模板（失败不阻断构建）
 RUN nuclei -update-templates -silent || true
